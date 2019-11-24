@@ -1,19 +1,19 @@
-.SUFFIXES: .c
+# Makefile for C++20 in Arduino Nano 
+# Emil Gedda 2019
 
-CC=avr-gcc
-MCU=atmega328p
-CFLAGS=-Wall -Os -std=c11 -mmcu=${MCU} -DF_CPU=16000000L
-HEXFLAGS=-j .text -j .data -j .text.startup -O ihex
-AVRDUDEFLAGS=-p ${MCU} -c arduino -D -b57600 -P /dev/ttyUSB0 -U
-OBJS=main.o
-HEX=main.hex
+CXX			:= avr-g++
+MCU			:= atmega328p
+CXXFLAGS	:= -Wall -Os -std=c++2a -mmcu=${MCU} -DF_CPU=16000000L
+HEXFLAGS	:= -j .text -j .data -O ihex
+FLASHFLAGS	:= -p ${MCU} -c arduino -D -b57600 -P /dev/ttyUSB0 -U
 
-default: ${HEX}
+SRCS := $(shell find . -name '*.cpp')
+OBJS := $(SRCS:%.cpp=%.o)
 
-all: upload
+default: main.hex
 
-upload: ${HEX}
-	avrdude ${AVRDUDEFLAGS} flash:w:${HEX}:i
+all upload: main.hex
+	avrdude ${FLASHFLAGS} flash:w:$<:i
 
 %.bin: ${OBJS}
 	avr-ld -o $@ $^
@@ -24,7 +24,5 @@ upload: ${HEX}
 clean:
 	rm -f *.o *.hex *.bin
 
-prepare-port:
-	sudo stty -F /dev/ttyACM0 cs8 9600 ignbrk -brkint -imaxbel -opost -onlcr -isig -icanon -iexten -echo -echoe -echok -echoctl -echoke noflsh -ixon -crtscts
-
-.PHONY: all upload default clean prepare-port
+.SUFFIXES: .c
+.PHONY: all upload default clean
