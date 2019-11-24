@@ -22,6 +22,4 @@ all upload: src/main.hex
 clean:
 	rm -f src/{*.o,*.hex,*.bin,main}
 
-echo:
-	echo ${OBJS}
 .PHONY: default all upload clean
