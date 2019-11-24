@@ -1,7 +1,7 @@
 # Makefile for C++20 in Arduino Nano main
 # Emil Gedda 2019
 
-CC 		   := avr-gcc
+CC         := avr-gcc
 CXX        := avr-g++
 MCU        := atmega328p
 CXXFLAGS   := -Wall -Os -std=c++2a -mmcu=${MCU} -DF_CPU=16000000L
