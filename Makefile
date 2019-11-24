@@ -8,18 +8,20 @@ CXXFLAGS   := -Wall -Os -std=c++2a -mmcu=${MCU} -DF_CPU=16000000L
 HEXFLAGS   := -j .text -j .data -O ihex
 FLASHFLAGS := -p ${MCU} -c arduino -D -b57600 -P /dev/ttyUSB0 -U
 
-SRCS := $(shell find . -name '*.cpp')
+SRCS := $(shell find src -name '*.cpp')
 OBJS := $(SRCS:%.cpp=%.o)
 
-main: ${OBJS}
+src/main: ${OBJS}
 
-all upload: main.hex
+all upload: src/main.hex
 	avrdude ${FLASHFLAGS} flash:w:$<:i
 
 %.hex: %
 	avr-objcopy ${HEXFLAGS} $< $@
 
 clean:
-	rm -f *.o *.hex *.bin main
+	rm -f src/{*.o,*.hex,*.bin,main}
 
+echo:
+	echo ${OBJS}
 .PHONY: default all upload clean
