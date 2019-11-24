@@ -1,11 +1,11 @@
 # Makefile for C++20 in Arduino Nano 
 # Emil Gedda 2019
 
-CXX         := avr-g++
-MCU         := atmega328p
-CXXFLAGS    := -Wall -Os -std=c++2a -mmcu=${MCU} -DF_CPU=16000000L
-HEXFLAGS    := -j .text -j .data -O ihex
-FLASHFLAG   := -p ${MCU} -c arduino -D -b57600 -P /dev/ttyUSB0 -U
+CXX        := avr-g++
+MCU        := atmega328p
+CXXFLAGS   := -Wall -Os -std=c++2a -mmcu=${MCU} -DF_CPU=16000000L
+HEXFLAGS   := -j .text -j .data -O ihex
+FLASHFLAGS := -p ${MCU} -c arduino -D -b57600 -P /dev/ttyUSB0 -U
 
 SRCS := $(shell find . -name '*.cpp')
 OBJS := $(SRCS:%.cpp=%.o)
