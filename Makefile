@@ -1,6 +1,7 @@
-# Makefile for C++20 in Arduino Nano 
+# Makefile for C++20 in Arduino Nano main
 # Emil Gedda 2019
 
+CC 		   := avr-gcc
 CXX        := avr-g++
 MCU        := atmega328p
 CXXFLAGS   := -Wall -Os -std=c++2a -mmcu=${MCU} -DF_CPU=16000000L
@@ -10,19 +11,15 @@ FLASHFLAGS := -p ${MCU} -c arduino -D -b57600 -P /dev/ttyUSB0 -U
 SRCS := $(shell find . -name '*.cpp')
 OBJS := $(SRCS:%.cpp=%.o)
 
-default: main.hex
+main: ${OBJS}
 
 all upload: main.hex
 	avrdude ${FLASHFLAGS} flash:w:$<:i
 
-%.bin: ${OBJS}
-	avr-ld -o $@ $^
-
-%.hex: %.bin
+%.hex: %
 	avr-objcopy ${HEXFLAGS} $< $@
 
 clean:
-	rm -f *.o *.hex *.bin
+	rm -f *.o *.hex *.bin main
 
-.SUFFIXES: .c
-.PHONY: all upload default clean
+.PHONY: default all upload clean
